@@ -17,6 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello/{name}', function(string $name) {
-    return "Hello, " . $name; 
+Route::get('/hello/{a}', function(string $a) {
+    return "Hello, " . $a; 
+});
+
+Route::get('/projectinfo', function() {
+    return "Project info"; 
+});
+
+Route::get('/news', function() {
+    return "News"; 
 });
