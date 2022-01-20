@@ -26,10 +26,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function(){
 Route::get('/news', [NewsController::class, 'index'])
 ->name('news/index');
 
+
 Route::get('/all_news/{id}', [NewsController::class, 'showNews'])
 ->where('id', '\d+')
 ->name('news/showNews');
 
 Route::get('/all_news/{category}', [NewsController::class, 'showCategoryNews'])
-->name('/all_news/showCategoryNews');;
-
+->name('/all_news/showCategoryNews');
