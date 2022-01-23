@@ -1,7 +1,5 @@
-<header>
-    header
-</header>
-
+@extends('layouts.newses')
+@section('newses')
 <div>
     <h2>
         {{$news['title']}}
@@ -9,7 +7,6 @@
 
     <p>Новость: {{$news['description']}}</p>
 </div>
+<x-feedback></x-feedback>
+@endsection
 
-<footer>
-    footer
-</footer>

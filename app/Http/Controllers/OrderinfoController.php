@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class OrderinfoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.categories.index');
+        return view('forms.orderinfo');
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -24,7 +22,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return "Добавить категории";
+        //
     }
 
     /**
@@ -35,7 +33,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "phone" => ['required', 'number', 'min:9']
+        ]);
+        
+        file_put_contents('newstestfiles/test.json', json_encode( $request->all()) . '\n', FILE_APPEND);
+        return $request->setJson($request->all());
     }
 
     /**
