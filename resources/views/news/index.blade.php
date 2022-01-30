@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('categories')
+@section('content')
 @foreach($categories as $category)
 <div class="col-lg-4">
     <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +10,7 @@
     <h2> {{ $category['title'] }}</h2>
     {{-- <p>Some representative placeholder content for the three columns of text below the carousel. This is the first
         column.</p> --}}
-    <p><a class="btn btn-secondary" href="{{ route('/all_news/showCategoryNews', ['category' => $category['title']]) }}">Перейти &raquo;</a></p>
+    <p><a class="btn btn-secondary" href="{{ route('all_news/showCategoryNews', ['category' => $category['title']]) }}">Перейти &raquo;</a></p>
 </div>
 @endforeach
 @endsection
