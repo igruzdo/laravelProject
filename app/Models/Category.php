@@ -11,9 +11,14 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'categories';
+    public static $availableFields = ['id', 'title', 'description'];
+    protected $fillable = [
+        'title',
+        'description'
+    ];
 
     public function getCategories() {
-        return DB::table($this->table)->select('id', 'title', 'description')->get()->toArray();
+        return DB::table($this->table)->select($this->availableFields)->get()->toArray();
     }
 
     public function getCategoryById(int $id) {

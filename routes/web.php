@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\NewsController;
+use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use \App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use \App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
+use \App\Http\Controllers\Admin\OrderinfosController as AdminOrderinfosController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\OrderinfoController;
+use App\Http\Controllers\OrderinfosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,13 +25,20 @@ use App\Http\Controllers\OrderinfoController;
 Route::group(['as' => 'admin.', 'prefix' => 'admin'], function(){
     Route::view('/', 'admin.index')->name('index');
     Route::resource('/categories', AdminCategoryController::class);
+    Route::resource('/categories/edit', AdminCategoryController::class);
     Route::resource('/news', AdminNewsController::class);
+    Route::resource('/news/edit', AdminNewsController::class);
+    Route::resource('/news/destroy', AdminNewsController::class);
+    Route::resource('/feedback', AdminFeedbackController::class);
+    Route::resource('/feedback/edit', AdminFeedbackController::class);
+    Route::resource('/feedback/destroy', AdminFeedbackController::class);
+    Route::resource('/orderinfos', AdminOrderinfosController::class);
+    Route::resource('/orderinfos/edit', AdminOrderinfosController::class);
+    Route::resource('/orderinfos/destroy', AdminOrderinfosController::class);
 });
 
-
-Route::get('/news', [NewsController::class, 'index'])
-->name('news/index');
-
+Route::get('/categories', [CategoryController::class, 'index'])
+->name('categories/index');
 
 Route::get('/all_news/news/{id}', [NewsController::class, 'showNews'])
 ->where('id', '\d+')
@@ -37,5 +47,7 @@ Route::get('/all_news/news/{id}', [NewsController::class, 'showNews'])
 Route::get('/all_news/{category}', [NewsController::class, 'showCategoryNews'])
 ->name('all_news/showCategoryNews');
 
-Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback');
-Route::get('orderinfo', [OrderinfoController::class, 'index'])->name('orderinfo');
+Route::resource('feedback', FeedbackController::class);
+
+Route::resource('orderinfos', OrderinfosController::class);
+

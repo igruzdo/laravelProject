@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\News;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
@@ -14,7 +18,12 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return view('admin.news.index');
+        
+        $news = News::paginate(10);
+        
+        return view('admin.news.index', [
+            'newsList' => $news
+        ]);
     }
 
     /**
@@ -24,7 +33,11 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('admin.news.create');
+        
+        $categories = Category::all();
+        return view('admin.news.create', [
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -35,13 +48,26 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
+    
         $request->validate([
             "title" => ['required', 'string', 'min:5']
         ]);
-        
+        $data = $request->only(['title', 'data', 'status', 'description']) + [
+            'slug' => Str::slug($request->input('title'))
+        ];
 
-        file_put_contents('newstestfiles/test.json', json_encode( $request->all()) . '\n', FILE_APPEND);
-        return $request->all();
+        $created = News::create($data);
+
+        if($created) {
+            foreach($request->input('categories') as $category) {
+                DB::table('categories_has_news')->insert([
+                    'category_id' => intval($category),
+                    'news_id' => $created->id
+                ]);
+            }
+            return redirect()->route('admin.news.index')->with('success', 'Запись успешно добавлена');
+        }
+        return back()->with('error', 'Ошибка добавления данных')->withInput();
     }
 
     /**
@@ -61,9 +87,17 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(News $news)
     {
-        //
+        
+        $categories = Category::all();
+        $selectCategories = DB::table('categories_has_news')->where('news_id', '=', $news->id)->get()->map(fn($item) => $item->category_id)->toArray();
+
+        return view('admin.news.edit', [
+            'news' => $news,
+            'categories' => $categories,
+            'selectCategories' => $selectCategories
+        ]);
     }
 
     /**
@@ -73,19 +107,40 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, News $news)
     {
-        //
+        
+        $request->validate([
+            "title" => ['required', 'string', 'min:5']
+        ]);
+        $data = $request->only(['title', 'data', 'status', 'description']) + [
+            'slug' => Str::slug($request->input('title'))
+        ];
+
+        $updated = $news->fill($data)->save();
+
+        if($updated) {
+            DB::table('categories_has_news')->where('news_id', $news->id)->delete();
+
+            foreach($request->input('categories') as $category) {
+                DB::table('categories_has_news')->insert([
+                    'category_id' => intval($category),
+                    'news_id' => $news->id
+                ]);
+            }
+            return redirect()->route('admin.news.index')->with('success', 'Запись успешно обновлена');
+        }
+        return back()->with('error', 'Ошибка обновления данных')->withInput();
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(News $news)
     {
-        //
+
+        DB::table('categories_has_news')->where('news_id', $news->id)->delete();
+        DB::table('news')->delete($news->id);
+
+        return redirect()->route('admin.news.index')->with('success', 'Запись успешно удалена');
+
     }
 }
