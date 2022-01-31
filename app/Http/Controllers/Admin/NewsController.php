@@ -17,9 +17,8 @@ class NewsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        
-        $news = News::paginate(10);
+    {       
+        $news = News::with('categories')->paginate(10);
         
         return view('admin.news.index', [
             'newsList' => $news
@@ -52,7 +51,7 @@ class NewsController extends Controller
         $request->validate([
             "title" => ['required', 'string', 'min:5']
         ]);
-        $data = $request->only(['title', 'data', 'status', 'description']) + [
+        $data = $request->only(['title', 'data', 'status', 'author',  'description']) + [
             'slug' => Str::slug($request->input('title'))
         ];
 
@@ -60,10 +59,11 @@ class NewsController extends Controller
 
         if($created) {
             foreach($request->input('categories') as $category) {
-                DB::table('categories_has_news')->insert([
-                    'category_id' => intval($category),
-                    'news_id' => $created->id
-                ]);
+                // DB::table('categories_has_news')->insert([
+                //     'category_id' => intval($category),
+                //     'news_id' => $created->id
+                // ]);
+                $created->categories()->attach($category);
             }
             return redirect()->route('admin.news.index')->with('success', 'Запись успешно добавлена');
         }

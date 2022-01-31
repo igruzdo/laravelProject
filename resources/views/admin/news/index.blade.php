@@ -15,6 +15,7 @@
             <tr>
                 <th>#ID</th>
                 <th>Title</th>
+                <th>Categories</th>
                 <th>Author</th>
                 <th>Status</th>
                 <th>Created_at</th>
@@ -26,6 +27,11 @@
                 <tr>
                     <td>{{ $news->id }}</td>
                     <td>{{ $news->title }}</td>
+                    <td>
+                        @foreach ($news->categories as $category)
+                            {{ $category->title }},
+                        @endforeach
+                    </td>
                     <td>{{ $news->author }}</td>
                     <td>{{ $news->status }}</td>
                     <td>{{ $news->created_at }}</td>
