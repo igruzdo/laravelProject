@@ -2,32 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\News;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
+    private $news;
+
+    public function __construct() {
+        $this->news = new News();
+    }
+
     public function index () {
-        $category = $this->getCategories();
+
+        $category = new Category();
+
+        $categories = $category->getCategories();
 
         return view('news/index', [
-            'categories' => $category
+            'categories' => $categories
         ]);
     }
 
-    public function showCategoryNews (string $incategory) {
+    public function showCategoryNews (int $incategory) {
 
-        $category = $this->getCategories($incategory);
-        $categoryNews = $this->getNews();
+        
+        $categoryNews = $this->news->getNewsByCategory($incategory);
 
         return view('news/newsOfCategory', [
-            'category' => $category,
+            'category' => $incategory,
             'allNews' => $categoryNews
         ]);
     }
 
     public function showNews (int $id) {
-        $news = $this->getNews($id);
 
+        $news = $this->news->getNewsById($id)[0];
         return view('news/showNews', [
 
             'news' => $news

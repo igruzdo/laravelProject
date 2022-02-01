@@ -30,7 +30,7 @@ Route::get('/news', [NewsController::class, 'index'])
 ->name('news/index');
 
 
-Route::get('/all_news/{id}', [NewsController::class, 'showNews'])
+Route::get('/all_news/news/{id}', [NewsController::class, 'showNews'])
 ->where('id', '\d+')
 ->name('news/showNews');
 
