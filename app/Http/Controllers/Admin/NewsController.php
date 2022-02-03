@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\news\CreateRequest;
+use App\Http\Requests\news\UpdateRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Models\News;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -45,13 +46,10 @@ class NewsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
     
-        $request->validate([
-            "title" => ['required', 'string', 'min:5']
-        ]);
-        $data = $request->only(['title', 'data', 'status', 'author',  'description']) + [
+        $data = $request->validated() + [
             'slug' => Str::slug($request->input('title'))
         ];
 
@@ -65,9 +63,9 @@ class NewsController extends Controller
                 // ]);
                 $created->categories()->attach($category);
             }
-            return redirect()->route('admin.news.index')->with('success', 'Запись успешно добавлена');
+            return redirect()->route('admin.news.index')->with('success', trans('messages.admin.news.created.success'));
         }
-        return back()->with('error', 'Ошибка добавления данных')->withInput();
+        return back()->with('error', trans('messages.admin.news.created.error'))->withInput();
     }
 
     /**
@@ -107,13 +105,15 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, News $news)
+    public function update(UpdateRequest $request, News $news)
     {
-        
-        $request->validate([
-            "title" => ['required', 'string', 'min:5']
-        ]);
-        $data = $request->only(['title', 'data', 'status', 'description']) + [
+        // try {
+        //     $this->validate($request, ["title" => ['required', 'string', 'min:5']]);
+        // } catch (ValidationException $e) {
+        //     dd($e->validator);
+        // }
+
+        $data = $request->validated() + [
             'slug' => Str::slug($request->input('title'))
         ];
 
@@ -128,15 +128,21 @@ class NewsController extends Controller
                     'news_id' => $news->id
                 ]);
             }
-            return redirect()->route('admin.news.index')->with('success', 'Запись успешно обновлена');
+            return redirect()->route('admin.news.index')->with('success', trans('messages.admin.news.created.success'));
         }
-        return back()->with('error', 'Ошибка обновления данных')->withInput();
+        return back()->with('error', trans('messages.admin.news.created.error'))->withInput();
 
     }
 
     public function destroy(News $news)
     {
-
+        try {
+            $news->delete();
+            return response()->json('ok');
+        } catch (\Exception $th) {
+            
+            return response()->json('error', 400);
+        }
         DB::table('categories_has_news')->where('news_id', $news->id)->delete();
         DB::table('news')->delete($news->id);
 

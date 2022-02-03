@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use App\Http\Requests\feedbacks\CreateRequest;
+use App\Http\Requests\feedbacks\UpdateRequest;
 
 class FeedbackController extends Controller
 {

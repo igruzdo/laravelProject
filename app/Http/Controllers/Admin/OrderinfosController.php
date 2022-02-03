@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Orderinfos;
 use Illuminate\Http\Request;
+use App\Http\Requests\orderinfos\CreateRequest;
+use App\Http\Requests\orderinfos\UpdateRequest;
 
 class OrderinfosController extends Controller
 {

@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
+use App\Models\News;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -13,6 +15,7 @@ class NewsAdminTest extends TestCase
      *
      * @return void
      */
+    use RefreshDatabase;
     public function testAdminPageAvailable()
     {
         $response = $this->get(route('admin.index'));
@@ -34,17 +37,15 @@ class NewsAdminTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testNewsStoreJSON()
+    public function testNewsStore()
     {
-        $data = [
-            'title' => 'adafs',
-            'author' => 'qwerwqerwqe',
-            'status' => 'DRAFT',
-            'description' => 'oishdpfphuih45345234lijdslfjhdasflhg'    
-        ];
-        $response = $this->post(route('admin.news.store'), $data);
+        $category = Category::factory()->create();
+        $newsFactoryData = News::factory()->definition();
+        $categories = ['categories' => $category->id];
 
-        $response->assertStatus(200);
-        $response->assertJson($data);
+    
+        $response = $this->post(route('admin.news.store'), $newsFactoryData + $categories);
+
+        $response->assertStatus(302);
     }
 }

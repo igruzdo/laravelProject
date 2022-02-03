@@ -14,7 +14,6 @@
         <thead>
             <tr>
                 <th>#ID</th>
-                <th>Title</th>
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Email</th>

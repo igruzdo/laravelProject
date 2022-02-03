@@ -15,14 +15,23 @@
                     <option value="{{ $category->id }}">{{ $category->title }}</option>
                 @endforeach
             </select>
+            @error('categories')
+                 <strong style="color:red"> {{ $message }} </strong>
+             @enderror
         </div>
         <div class="form-group">
             <label for="title">Наименование</label>
             <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+            @error('categories')
+                 <strong style="color:red"> {{ $message }} </strong>
+             @enderror
         </div>
         <div class="form-group">
             <label for="author">Автор</label>
             <input type="text" class="form-control" id="author" name="author" value="{{ old('author') }}">
+            @error('author')
+                 <strong style="color:red"> {{ $message }} </strong>
+             @enderror
         </div>
         <div class="form-group">
             <label for="status">Статус</label>
@@ -47,6 +56,9 @@
         <div class="form-group">
             <label for="description">Описание</label>
             <textarea name="description" id="description" cols="30" rows="10" class="form-control">{{ old('description') }}</textarea>
+            @error('description')
+                 <strong style="style:red"> {{ $message }} </strong>
+             @enderror
         </div>    
         <button type="submit" class="btn btn-success" style="float: right; margin-top:10px">Сохранить</button>    
     </form>

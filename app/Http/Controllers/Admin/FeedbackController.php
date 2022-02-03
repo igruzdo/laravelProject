@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use App\Http\Requests\feedbacks\CreateRequest;
+use App\Http\Requests\feedbacks\UpdateRequest;
 
 class FeedbackController extends Controller
 {
@@ -22,11 +24,9 @@ class FeedbackController extends Controller
         return view('admin.feedback.create');
     }
 
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
-        $request->validate([
-            "name" => ['required', 'string', 'min:5']
-        ]);
+        $data = $request->validated();
         $data = $request->only(['name', 'description']);
 
         $created = Feedback::create($data);
@@ -49,11 +49,9 @@ class FeedbackController extends Controller
         ]);
     }
 
-    public function update(Request $request, Feedback $feedback)
+    public function update(UpdateRequest $request, Feedback $feedback)
     {
-        $request->validate([
-            "name" => ['required', 'string', 'min:5']
-        ]);
+        $data = $request->validated();
 
         $data = $request->only(['title', 'description']);
 
