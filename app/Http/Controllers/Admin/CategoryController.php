@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\categories\CreateRequest;
+use App\Http\Requests\categories\UpdateRequest;
 
 class CategoryController extends Controller
 {
@@ -14,7 +18,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.categories.index');
+        $categories = Category::paginate(5);
+        
+        return view('admin.categories.index', [
+            'categoriesList' => $categories
+        ]);
     }
 
     /**
@@ -24,7 +32,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return "Добавить категории";
+        return view('admin.categories.create');
     }
 
     /**
@@ -35,7 +43,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "title" => ['required', 'string', 'min:5']
+        ]);
+        $data = $request->only(['title', 'description']);
+
+        $created = Category::create($data);
+
+        if($created) {
+            return redirect()->route('admin.categories.index')->with('success', 'Запись успешно добавлена');
+        }
+        return back()->with('error', 'Ошибка добавления данных')->withInput();
     }
 
     /**
@@ -55,9 +73,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        return view('admin.categories.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -67,9 +87,20 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            "title" => ['required', 'string', 'min:5']
+        ]);
+
+        $data = $request->only(['title', 'description']);
+
+        $updated = $category->fill($data)->save();
+
+        if($updated) {
+            return redirect()->route('admin.categories.index')->with('success', 'Запись успешно обновлена');
+        }
+        return back()->with('error', 'Ошибка обновления данных')->withInput();
     }
 
     /**

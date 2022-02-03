@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Feedback;
 use Illuminate\Http\Request;
-use App\Http\Requests\feedbacks\CreateRequest;
-use App\Http\Requests\feedbacks\UpdateRequest;
 
-class FeedbackController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +13,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        return view('forms.feedback');
+        //
     }
 
     /**
@@ -37,17 +34,7 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            "name" => ['required', 'string', 'min:5']
-        ]);
-        $data = $request->only(['name', 'description']);
-
-        $created = Feedback::create($data);
-
-        if($created) {
-            return redirect()->route('feedback.index')->with('success', 'Запись успешно добавлена');
-        }
-        return back()->with('error', 'Ошибка добавления данных')->withInput();
+        //
     }
 
     /**

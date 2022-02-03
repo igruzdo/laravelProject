@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Feedback;
 use Illuminate\Http\Request;
-use App\Http\Requests\feedbacks\CreateRequest;
-use App\Http\Requests\feedbacks\UpdateRequest;
+use App\Models\Category;
+use App\Models\News;
 
-class FeedbackController extends Controller
+
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,11 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        return view('forms.feedback');
+        $categories = Category::query()->select(Category::$availableFields)->get();
+
+        return view('categories/index', [
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -37,17 +41,7 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            "name" => ['required', 'string', 'min:5']
-        ]);
-        $data = $request->only(['name', 'description']);
-
-        $created = Feedback::create($data);
-
-        if($created) {
-            return redirect()->route('feedback.index')->with('success', 'Запись успешно добавлена');
-        }
-        return back()->with('error', 'Ошибка добавления данных')->withInput();
+        //
     }
 
     /**

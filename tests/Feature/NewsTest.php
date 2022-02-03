@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Category;
 
 class NewsTest extends TestCase
 {
@@ -15,14 +16,16 @@ class NewsTest extends TestCase
      */
     public function testList()
     {
-        $response = $this->get(route('news/index'));
+        $response = $this->get(route('categories/index'));
 
         $response->assertStatus(200);
     }
 
     public function testShow()
     {
-        $response = $this->get(route('all_news/showCategoryNews', ['category' => 'asdasdasdasdasdasd']));
+        $category = Category::factory()->create();
+        $categories = ['category' => $category->id];
+        $response = $this->get(route('all_news/showCategoryNews', $categories));
 
         $response->assertStatus(200);
     }

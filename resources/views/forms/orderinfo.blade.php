@@ -6,11 +6,11 @@
             <x-alert type="danger" :message="$error"></x-alert>
         @endforeach
     @endif
-    <form method="POST" action="{{ route('admin.news.store') }}">
+    <form method="POST" action="{{ route('orderinfos.store') }}">
         @csrf
         <div class="form-group">
-            <label for="title">Введите ваше имя</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+            <label for="name">Введите ваше имя</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ old('title') }}">
         </div>
         <div class="form-group">
             <label for="phone">Введите номер телефона</label>

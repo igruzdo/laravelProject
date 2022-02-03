@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Orderinfos;
 use Illuminate\Http\Request;
+use App\Http\Requests\orderinfos\CreateRequest;
+use App\Http\Requests\orderinfos\UpdateRequest;
 
-class OrderinfoController extends Controller
+class OrderinfosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +16,7 @@ class OrderinfoController extends Controller
      */
     public function index()
     {
-        return view('forms.orderinfo');
+        return view('forms/orderinfo');
     }
     /**
      * Show the form for creating a new resource.
@@ -31,14 +34,18 @@ class OrderinfoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
     public function store(Request $request)
-    {
-        $request->validate([
-            "phone" => ['required', 'number', 'min:9']
-        ]);
-        
-        file_put_contents('newstestfiles/test.json', json_encode( $request->all()) . '\n', FILE_APPEND);
-        return $request->setJson($request->all());
+    {      
+        $data = $request->only(['name', 'phone', 'email', 'description']);
+
+        $created = Orderinfos::create($data);
+
+        if($created) {
+            return redirect()->route('orderinfo.index')->with('success', 'Запись успешно добавлена');
+        }
+        return back()->with('error', 'Ошибка добавления данных')->withInput();
     }
 
     /**
