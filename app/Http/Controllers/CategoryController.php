@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\News;
 
-class OrderinfoController extends Controller
+
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,8 +16,13 @@ class OrderinfoController extends Controller
      */
     public function index()
     {
-        return view('forms.orderinfo');
+        $categories = Category::query()->select(Category::$availableFields)->get();
+
+        return view('categories/index', [
+            'categories' => $categories
+        ]);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -33,12 +41,7 @@ class OrderinfoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            "phone" => ['required', 'number', 'min:9']
-        ]);
-        
-        file_put_contents('newstestfiles/test.json', json_encode( $request->all()) . '\n', FILE_APPEND);
-        return $request->setJson($request->all());
+        //
     }
 
     /**

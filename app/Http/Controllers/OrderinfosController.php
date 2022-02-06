@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Feedback;
+use App\Models\Orderinfos;
 use Illuminate\Http\Request;
 
-class FeedbackController extends Controller
+class OrderinfosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,8 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        return view('forms.feedback');
+        return view('forms/orderinfo');
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -33,17 +32,16 @@ class FeedbackController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            "name" => ['required', 'string', 'min:5']
-        ]);
-        $data = $request->only(['name', 'description']);
 
-        $created = Feedback::create($data);
+
+    public function store(Request $request)
+    {      
+        $data = $request->only(['name', 'phone', 'email', 'description']);
+
+        $created = Orderinfos::create($data);
 
         if($created) {
-            return redirect()->route('feedback.index')->with('success', 'Запись успешно добавлена');
+            return redirect()->route('orderinfo.index')->with('success', 'Запись успешно добавлена');
         }
         return back()->with('error', 'Ошибка добавления данных')->withInput();
     }
