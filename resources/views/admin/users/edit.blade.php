@@ -29,6 +29,7 @@
                 @if ($user->is_admin == 1)
                     selected
                 @endif 
+                
                 value=1 >True</option>
             </select>
         </div>   
