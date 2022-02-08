@@ -1,11 +1,18 @@
 <?php
 
+use App\Http\Controllers\Account\IndexController as AccountController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\NewsController;
+use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use \App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use \App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
+use \App\Http\Controllers\Admin\OrderinfosController as AdminOrderinfosController;
+use \App\Http\Controllers\Admin\UserController as AdminUserfosController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\OrderinfoController;
+use App\Http\Controllers\OrderinfosController;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,18 +24,37 @@ use App\Http\Controllers\OrderinfoController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/account', AccountController::class)->name('account');
 
+    Route::get('/logout', function(){
+        Auth::logout();
+        return redirect()->route('login');
+    })->name('account.logout');
 
-Route::group(['as' => 'admin.', 'prefix' => 'admin'], function(){
-    Route::view('/', 'admin.index')->name('index');
-    Route::resource('/categories', AdminCategoryController::class);
-    Route::resource('/news', AdminNewsController::class);
+    Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => 'admin'], function(){
+        Route::view('/', 'admin.index')->name('index');
+        Route::resource('/categories', AdminCategoryController::class);
+        Route::resource('/categories/edit', AdminCategoryController::class);
+        Route::resource('/news', AdminNewsController::class);
+        Route::resource('/news/edit', AdminNewsController::class);
+        Route::resource('/news/destroy', AdminNewsController::class);
+        Route::resource('/feedback', AdminFeedbackController::class);
+        Route::resource('/feedback/edit', AdminFeedbackController::class);
+        Route::resource('/feedback/destroy', AdminFeedbackController::class);
+        Route::resource('/orderinfos', AdminOrderinfosController::class);
+        Route::resource('/orderinfos/edit', AdminOrderinfosController::class);
+        Route::resource('/orderinfos/destroy', AdminOrderinfosController::class);
+        Route::resource('/users', AdminUserfosController::class);
+        Route::resource('/users/edit', AdminUserfosController::class);
+    });
 });
 
+Route::get('/', [Controller::class, 'index']);
 
-Route::get('/news', [NewsController::class, 'index'])
-->name('news/index');
 
+Route::get('/categories', [CategoryController::class, 'index'])
+->name('categories/index');
 
 Route::get('/all_news/news/{id}', [NewsController::class, 'showNews'])
 ->where('id', '\d+')
@@ -37,5 +63,20 @@ Route::get('/all_news/news/{id}', [NewsController::class, 'showNews'])
 Route::get('/all_news/{category}', [NewsController::class, 'showCategoryNews'])
 ->name('all_news/showCategoryNews');
 
-Route::get('feedback', [FeedbackController::class, 'index'])->name('feedback');
-Route::get('orderinfo', [OrderinfoController::class, 'index'])->name('orderinfo');
+Route::resource('feedback', FeedbackController::class);
+
+Route::resource('orderinfos', OrderinfosController::class);
+
+Route::get("/session", function() {
+    if(session()->has('test')) {
+        dd(session()->all(), session()->get('test'));
+        session()->forget('test');
+    }
+
+    session(['test' => rand(1, 1000)]);
+});
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

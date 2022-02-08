@@ -1,13 +1,9 @@
-@if ($errors->any())
-@foreach ($errors->all() as $error)
-    <x-alert type="danger" :message="$error"></x-alert>
-@endforeach
-@endif
-<form method="POST" action="{{ route('admin.news.store') }}">
+<form method="POST" action="{{ route('feedback.index') }}">
 @csrf
+@include('inc.message')
 <div class="form-group">
-    <label for="title">Введите ваше имя</label>
-    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+    <label for="name">Введите ваше имя</label>
+    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
 </div>
 <div class="form-group">
     <label for="description">Ваш комментарий</label>

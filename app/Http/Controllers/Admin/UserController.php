@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class OrderinfoController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,8 +15,13 @@ class OrderinfoController extends Controller
      */
     public function index()
     {
-        return view('forms.orderinfo');
+        $users = User::paginate(5);
+        
+        return view('admin.users.index', [
+            'users' => $users
+        ]);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -33,12 +40,7 @@ class OrderinfoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            "phone" => ['required', 'number', 'min:9']
-        ]);
-        
-        file_put_contents('newstestfiles/test.json', json_encode( $request->all()) . '\n', FILE_APPEND);
-        return $request->setJson($request->all());
+        //
     }
 
     /**
@@ -58,9 +60,11 @@ class OrderinfoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('admin.users.edit', [
+            'user' => $user
+        ]);
     }
 
     /**
@@ -70,9 +74,20 @@ class OrderinfoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            "name" => ['required', 'string', 'min:5']
+        ]);
+
+        $data = $request->only(['name', 'is_admin']);
+
+        $updated = $user->fill($data)->save();
+
+        if($updated) {
+            return redirect()->route('admin.users.index')->with('success', 'Запись успешно обновлена');
+        }
+        return back()->with('error', 'Ошибка обновления данных')->withInput();
     }
 
     /**
