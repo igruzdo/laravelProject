@@ -28,7 +28,7 @@
 
 <body>
 
-    <x-header></x-header>
+    <x-admin.header></x-admin.header>
 
     <div class="container-fluid">
         <div class="row">

@@ -31,6 +31,12 @@
             Заказы
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link @if(request()->routeIs('admin.users.*')) active @endif" href="{{ route('admin.users.index') }}">
+            <span data-feather="file"></span>
+            Пользователи
+          </a>
+        </li>
       </ul>
     </div>
   </nav>
