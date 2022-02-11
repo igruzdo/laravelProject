@@ -15,7 +15,7 @@ class CategoryAdminTest extends TestCase
      */
     public function testAdminCategoriesAvailable()
     {
-        $response = $this->get('admin/categories');
+        $response = $this->get('admin/categories/index');
 
         $response->assertStatus(200);
     }

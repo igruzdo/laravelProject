@@ -15,8 +15,32 @@
         </li>
         <li class="nav-item">
           <a class="nav-link @if(request()->routeIs('admin.news.*')) active @endif" href="{{ route('admin.news.index') }}">
-            <span data-feather="shopping-cart"></span>
+            <span data-feather="file"></span>
             Новости
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link @if(request()->routeIs('admin.feedback.*')) active @endif" href="{{ route('admin.feedback.index') }}">
+            <span data-feather="file"></span>
+            Обратная связь
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link @if(request()->routeIs('admin.orderinfos.*')) active @endif" href="{{ route('admin.orderinfos.index') }}">
+            <span data-feather="file"></span>
+            Заказы
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link @if(request()->routeIs('admin.users.*')) active @endif" href="{{ route('admin.users.index') }}">
+            <span data-feather="file"></span>
+            Пользователи
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link @if(request()->routeIs('admin.resource.*')) active @endif" href="{{ route('admin.resource.index') }}">
+            <span data-feather="file"></span>
+            Ресурсы для парсинга новостей
           </a>
         </li>
       </ul>

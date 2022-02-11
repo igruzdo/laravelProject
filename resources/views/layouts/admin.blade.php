@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
@@ -27,7 +28,7 @@
 
 <body>
 
-    <x-header></x-header>
+    <x-admin.header></x-admin.header>
 
     <div class="container-fluid">
         <div class="row">
@@ -48,7 +49,8 @@
     </div>
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
-    <script src="{{asset('js/dashboard.js')}}"></script>
+    <script src="{{asset('js/dashboard.js')}}"></script>  
+    <script src="{{asset('js/ckeditor/ckeditor.js')}}"></script>  
+    @stack('js')
 </body>
-
 </html>
