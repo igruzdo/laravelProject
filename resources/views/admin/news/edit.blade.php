@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 @include('inc.message')
-    <form method="POST" action="{{ route('admin.news.update', ['news' => $news]) }}">
+    <form method="POST" action="{{ route('admin.news.update', ['news' => $news]) }}" enctype="multipart/form-data">
         @csrf
         @method('put')
         <div class="form-group">
@@ -34,6 +34,10 @@
             @error('author')
                  <strong style="color:red"> {{ $message }} </strong>
              @enderror
+        </div>
+        <div class="form-group">
+            <label for="image">Загрузить изображение</label>
+            <input type="file" class="form-control" id="image" name="image">
         </div>
         
         <div class="form-group">
@@ -63,3 +67,13 @@
         <button type="submit" class="btn btn-success" style="float: right; margin-top:10px">Сохранить</button>    
     </form>
 @endsection
+@stack('js')
+@push('js')
+<script>
+    ClassicEditor
+        .create( document.querySelector( '#description' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+@endpush

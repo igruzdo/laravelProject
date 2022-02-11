@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class News extends Model
 {
-    use HasFactory;
+    use HasFactory, Sluggable;
 
     protected $table = 'news';
     protected $joinTable = 'categories_has_news';
@@ -29,15 +30,23 @@ class News extends Model
     }
 
     public function getNewsById(int $id) {
-        return DB::table($this->table)->select($this->availableFields)->where('id', '=', $id)->get()->toArray();
+        return DB::table($this->table)->select($this->availableFields)->where('id', $id)->get()->toArray();
     }
 
     public function getNewsByCategory(int $category_id) {
 
-        return DB::table($this->table)->join($this->joinTable, 'id', '=', 'news_id')->where('category_id', '=', $category_id)->get()->toArray();
+        return DB::table($this->table)->join($this->joinTable, 'id', '=', 'news_id')->where('category_id', $category_id)->get()->toArray();
     }
 
     public function categories():BelongsToMany {
         return $this->belongsToMany(Category::class, 'categories_has_news', 'news_id', 'category_id');
+    }
+
+    public function sluggable():array {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
     }
 }

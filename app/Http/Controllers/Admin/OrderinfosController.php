@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Orderinfos;
 use Illuminate\Http\Request;
-use App\Http\Requests\orderinfos\CreateRequest;
-use App\Http\Requests\orderinfos\UpdateRequest;
 
 class OrderinfosController extends Controller
 {
@@ -31,9 +29,7 @@ class OrderinfosController extends Controller
             "name" => ['required', 'string', 'min:5']
         ]);
         $data = $request->only(['name','phone', 'email', 'description']);
-
         $created = Orderinfos::create($data);
-
         if($created) {
             return redirect()->route('admin.orderinfos.index')->with('success', 'Запись успешно добавлена');
         }
@@ -59,9 +55,7 @@ class OrderinfosController extends Controller
         ]);
 
         $data = $request->only(['name','phone', 'email', 'description']);
-
         $updated = $orderinfo->fill($data)->save();
-
         if($updated) {
             return redirect()->route('admin.orderinfos.index')->with('success', 'Запись успешно обновлена');
         }

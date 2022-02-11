@@ -15,27 +15,13 @@ class NewsController extends Controller
 
     public function index () {
 
-        // $category = new Category();
-
-        // $categories = $category->getCategories();
-        // $categories = Category::query()->select(Category::$availableFields)->get();
-
-        // return view('news/index', [
-        //     'categories' => $categories
-        // ]);
     }
 
     public function showCategoryNews (int $incategory) {
 
-        $catRelation = Category::findOrFail($incategory);      
-        
+        $catRelation = Category::findOrFail($incategory);       
         $categoryNews = $this->news->getNewsByCategory($incategory);
         
-
-        // $categoryNews = News::findOrFail($incategory);
-
-        // dd($categoryNews['#attributes']);
-
         return view('news/newsOfCategory', [
             'category' => $incategory,
             'allNews' => $categoryNews
@@ -43,12 +29,7 @@ class NewsController extends Controller
     }
 
     public function showNews (int $id) {
-
-        
-
-        $news = News::findOrFail($id);
-
-        // dd($news->categories);
+       $news = News::findOrFail($id);
 
         return view('news/showNews', [
 

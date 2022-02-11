@@ -10,6 +10,7 @@ use \App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use \App\Http\Controllers\Admin\OrderinfosController as AdminOrderinfosController;
 use App\Http\Controllers\Admin\ParserController;
 use \App\Http\Controllers\Admin\UserController as AdminUserfosController;
+use \App\Http\Controllers\Admin\ResourceController as AdminResourceController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\OrderinfosController;
 use App\Http\Controllers\Controller;
@@ -50,6 +51,9 @@ Route::group(['middleware' => 'auth'], function() {
         Route::resource('/orderinfos/destroy', AdminOrderinfosController::class);
         Route::resource('/users', AdminUserfosController::class);
         Route::resource('/users/edit', AdminUserfosController::class);
+        Route::resource('/resource', AdminResourceController::class);
+        Route::resource('/resource/edit', AdminResourceController::class);
+        Route::resource('/resource/destroy', AdminResourceController::class);
     });
 });
 

@@ -6,5 +6,5 @@ interface Parser
 {
     public function setLink(string $str): self;
 
-    public function parse(): array;
+    public function parse(): void;
 }

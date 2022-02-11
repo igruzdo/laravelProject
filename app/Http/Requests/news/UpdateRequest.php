@@ -29,6 +29,7 @@ class UpdateRequest extends FormRequest
             'author' => ['required', 'string', 'min:2', 'max:50'],
             'status' => ['required', 'string', 'min:4', 'max:8'],
             'isImage' => ['nullable', 'boolean'],
+            'image' => ['nullable', 'file', 'image', 'mimes:png,jpg'],
             'description' => ['sometimes', 'string'],
         ];
     }
