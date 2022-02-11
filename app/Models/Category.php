@@ -5,19 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
     use HasFactory;
 
     protected $table = 'categories';
+    public static $availableFields = ['id', 'title', 'description'];
+    protected $fillable = [
+        'title',
+        'link',
+        'image',
+        'description'
+    ];
 
-    public function getCategories() {
-        return DB::table($this->table)->select('id', 'title', 'description')->get()->toArray();
-    }
-
-    public function getCategoryById(int $id) {
-
-        return DB::table($this->table)->where('id', '=', $id)->get();
+    public function news():BelongsToMany {
+        return $this->belongsToMany(News::class, 'categories_has_news', 'category_id', 'news_id');
+        // return $this->belongsToMany(News::class, 'categories_has_news', 'news_id', 'category_id');
     }
 }
