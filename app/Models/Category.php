@@ -15,6 +15,8 @@ class Category extends Model
     public static $availableFields = ['id', 'title', 'description'];
     protected $fillable = [
         'title',
+        'link',
+        'image',
         'description'
     ];
 

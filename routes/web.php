@@ -8,10 +8,12 @@ use \App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use \App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use \App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use \App\Http\Controllers\Admin\OrderinfosController as AdminOrderinfosController;
+use App\Http\Controllers\Admin\ParserController;
 use \App\Http\Controllers\Admin\UserController as AdminUserfosController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\OrderinfosController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SocialController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -33,6 +35,7 @@ Route::group(['middleware' => 'auth'], function() {
     })->name('account.logout');
 
     Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => 'admin'], function(){
+        Route::get('/parser', ParserController::class)->name('parser');
         Route::view('/', 'admin.index')->name('index');
         Route::resource('/categories', AdminCategoryController::class);
         Route::resource('/categories/edit', AdminCategoryController::class);
@@ -80,3 +83,12 @@ Route::get("/session", function() {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => 'guest'], function() {
+    Route::get('auth/{network}/redirect', [SocialController::class, 'redirect'])
+    ->where('network', '\w+')
+    ->name('auth.redirect');
+    Route::get('auth/{network}/callback', [SocialController::class, 'callback'])
+    ->where('network', '\w+')
+    ->name('auth.callback');
+});

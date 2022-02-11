@@ -8,6 +8,8 @@
                 <div class="card-header">{{ __('Вход') }}</div>
 
                 <div class="card-body">
+                    <a href="{{ route('auth.redirect', ['network' => 'vkontakte']) }}">Войти через VK</a>
+                    <a href="{{ route('auth.redirect', ['network' => 'yandex']) }}">Войти через Yandex</a>
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="row mb-3">

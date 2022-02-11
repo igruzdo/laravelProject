@@ -13,12 +13,14 @@ class News extends Model
 
     protected $table = 'news';
     protected $joinTable = 'categories_has_news';
-    protected $availableFields = ['title', 'author', 'status', 'description'];
+    protected $availableFields = ['title', 'author','link', 'image', 'status', 'description'];
     protected $fillable = [
         'title',
+        'link',
         'slug',
         'author',
         'status',
+        'image',
         'description'
     ];
 

@@ -57,10 +57,6 @@ class NewsController extends Controller
 
         if($created) {
             foreach($request->input('categories') as $category) {
-                // DB::table('categories_has_news')->insert([
-                //     'category_id' => intval($category),
-                //     'news_id' => $created->id
-                // ]);
                 $created->categories()->attach($category);
             }
             return redirect()->route('admin.news.index')->with('success', trans('messages.admin.news.created.success'));
